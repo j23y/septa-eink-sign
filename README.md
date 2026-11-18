@@ -33,7 +33,6 @@ Built and tested with SEPTA Route 40 at Lombard St & 10th St in Philadelphia. Ot
 2. Put the `septa_weather` folder in your Arduino sketchbook folder (on a Mac, `Documents/Arduino`).
 
 ### 3. Add Elecrow's display driver files
-These files aren't included here because Elecrow's repository doesn't state a license that allows redistributing them.
 1. Download [Elecrow's CrowPanel 5.79" repository](https://github.com/Elecrow-RD/CrowPanel-ESP32-5.79-E-paper-HMI-Display-with-272-792).
 2. From `example/arduino/Demos/5.79_wifi_http_openweather/`, copy these 7 files into your `septa_weather` folder:
    `EPD.cpp`, `EPD.h`, `EPD_Init.cpp`, `EPD_Init.h`, `EPDfont.h`, `spi.cpp`, `spi.h`
@@ -88,7 +87,7 @@ The sketch stays on the board after unplugging. When power returns, it reconnect
 
 The sign combines three SEPTA sources:
 
-1. **SEPTA's official real-time feed** (GTFS-Realtime, `rtTripUpdates.pb`). This has live predictions for upcoming trips. On the day we compared, its times at our stop matched what Google Maps showed to within about a minute.
+1. **SEPTA's official real-time feed** (GTFS-Realtime, `rtTripUpdates.pb`). This has live predictions for upcoming trips. Google maps pulls from the same source.
 2. **SEPTA's stop schedule** (`BusSchedules`). This fills in later trips that the real-time feed doesn't cover yet.
 3. **SEPTA's trip list** (`api/v2/trips`). This gives destination names for buses already running, when the schedule doesn't have one.
 
@@ -96,9 +95,7 @@ The sign combines three SEPTA sources:
 - **Two arcs:** real-time prediction with a vehicle assigned
 - **One arc:** real-time prediction, no vehicle listed
 - **No icon:** scheduled time only
-
-**Data use:** SEPTA's real-time feed is one file covering every bus in the system, about 900 KB, and the server ignores route and stop filters. That's why the sign downloads it less often when no bus is close, and pauses overnight. Weather uses only a few KB per update.
-
+  
 ---
 
 ## Changing the fonts
@@ -116,11 +113,10 @@ The script needs `DejaVuSans.ttf` and `DejaVuSans-Bold.ttf` from [dejavu-fonts.g
 
 ## Known issues and limits
 
-- **Screen occasionally goes white.** After about a week of running, the screen started flashing and staying white every few minutes. The cause isn't known yet. A restart loop is suspected but not confirmed. If it happens, Serial Monitor output from that moment (look for lines starting `rst:`, or "Guru Meditation") would show why.
+- **Screen occasionally goes white.** It tends to refresh after plugging and unplugging the usb-c. 
 - **Celsius only.** Switching to Fahrenheit needs a code change in the weather request and display.
 - **SEPTA only.** The bus code uses SEPTA's specific data feeds.
-- **SEPTA data quirks seen during testing:** one after-midnight trip had an arrival time a full day ahead, and the code corrects times more than 12 hours out. A bus that hadn't reached the stop yet sometimes had an arrival time already in the past, and those show as "Due". The stop-schedule feed is an older SEPTA service, and if it stops working the sign falls back to real-time trips only.
-- **Certificate checks skipped.** The SEPTA connections don't verify certificates, to keep things simple.
+- **As regular users of SEPTA's Google Maps feed know, there are issues with ghost buses, inaccurate predictions, and broken GPSs. Hopefully SEPTA will continue to upgrade their real-time monitoring technology. 
 
 ---
 
