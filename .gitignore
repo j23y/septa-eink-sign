@@ -1,0 +1,15 @@
+# Private settings: never upload
+secrets.h
+
+# Elecrow's display driver files (no license to redistribute; copy them in yourself, see README)
+septa_weather/EPD.cpp
+septa_weather/EPD.h
+septa_weather/EPD_Init.cpp
+septa_weather/EPD_Init.h
+septa_weather/EPDfont.h
+septa_weather/spi.cpp
+septa_weather/spi.h
+
+# Build output and system files
+build/
+.DS_Store
